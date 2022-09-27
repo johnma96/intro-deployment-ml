@@ -26,3 +26,22 @@ Data and models are tracked and save within some storage like Google Store or an
 	6. dvc run create subtask for be executed with repro
 	7. dvc repro
 	8. dvc dag Directed acyclic graph
+
+## Steps
+1. Run dvc init to start tracking of data and models
+2. Set GOOGLE_APPLICATION_CREDENTIALS enviroment variable using:
+	export GOOGLE_APPLICATION_CREDENTIALS=$(realpath <path/to/credentials>)
+3. Set remote storage and track files(AWS, GCP, Drive, etc)
+	* Go to cloud storage service of GCP
+	* Create bucket
+		- Name
+		- Multi-region
+		- Standard
+		- Other default or custom settings
+	* dvc remote add data-tracker gs://model_dataset_tracker_course/data
+	* dvc remote add model-tracker gs://model_dataset_tracker_course/model
+	* Add files
+		dvc add file/path OR dvc add data/local/path --to-remote -r data-tracker
+	* Push files
+		dvc push models/model.pkl -r model-tracker
+	
