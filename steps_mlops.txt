@@ -1,0 +1,28 @@
+# Training a model
+1. Start a local repository with a template like cokiecutter, this will speed up the develop
+2. Create a remote repository and conect it to local
+3. Develop your EDA, feature enginnering, tests of models and select the best model for your problem
+4. Save your model like .pkl object
+
+# Implementing Data Version Control with DVC library(
+Other tools for ML Data Versioning:
+	- Neptune
+	- Pachyderm
+	- Delta Lake
+	- Git LFS
+	- Dolt
+	- lakeFS
+	- DVC
+	- ML-Metadata
+
+Data and models are tracked and save within some storage like Google Store or any AWS service
+
+## Basics commands for DVS
+	1. dvc init
+	2. dvc remote
+	3. dvc add
+	4. dvc pull
+	5. dvc push
+	6. dvc run create subtask for be executed with repro
+	7. dvc repro
+	8. dvc dag Directed acyclic graph
