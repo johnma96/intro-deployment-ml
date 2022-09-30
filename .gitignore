@@ -89,7 +89,11 @@ target/
 # Mypy cache
 .mypy_cache/
 
-# Credentials
+# Credentials and models
 credentials/
-*.cvs
 *.pkl
+*.csv
+
+# Reports files
+*.png
+*.txt
