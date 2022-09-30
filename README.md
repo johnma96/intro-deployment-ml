@@ -1,57 +1,79 @@
-intro-deployment-ml
-==============================
+This project was developed following the guide of the course Introduction to the use of ML models offered by Platzi.
 
-Repository for Platzi's course related to MLops fundamentals
+Below is a compilation guide of the steps developed during the course.
 
-Project Organization
-------------
+# Training a model
+1. Start a local repository with a template like cokiecutter, this will speed up the develop
+2. Create a remote repository and conect it to local
+3. Develop your EDA, feature enginnering, tests of models and select the best model for your problem
+4. Save your model like .pkl object
 
-    ├── LICENSE
-    ├── Makefile           <- Makefile with commands like `make data` or `make train`
-    ├── README.md          <- The top-level README for developers using this project.
-    ├── data
-    │   ├── external       <- Data from third party sources.
-    │   ├── interim        <- Intermediate data that has been transformed.
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
-    │
-    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
-    │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
-    │
-    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-    │                         the creator's initials, and a short `-` delimited description, e.g.
-    │                         `1.0-jqp-initial-data-exploration`.
-    │
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-    │
-    ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
-    │
-    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-    │                         generated with `pip freeze > requirements.txt`
-    │
-    ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
-    ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
-    │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
-    │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
-    │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
-    │
-    └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
+# Implementing Data Version Control with DVC library(
+Other tools for ML Data Versioning:
+	- Neptune
+	- Pachyderm
+	- Delta Lake
+	- Git LFS
+	- Dolt
+	- lakeFS
+	- DVC
+	- ML-Metadata
 
+	Data and models are tracked and save within some storage like Google Store or any AWS service
 
---------
+## Basics commands for DVS
+	1. dvc init
+	2. dvc remote
+	3. dvc add
+	4. dvc pull
+	5. dvc push
+	6. dvc run create subtask for be executed with repro
+	7. dvc repro
+	8. dvc dag Directed acyclic graph
 
-<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
+## Steps
+1. Run dvc init to start tracking of data and models
+2. Set GOOGLE_APPLICATION_CREDENTIALS enviroment variable using:
+	export GOOGLE_APPLICATION_CREDENTIALS=$(realpath <path/to/credentials>)
+	echo $GOOGLE_APPLICATION_CREDENTIALS
+3. Set remote storage and track files(AWS, GCP, Drive, etc)
+	* Go to cloud storage service of GCP
+	* Create bucket
+		- Name
+		- Multi-region
+		- Standard
+		- Other default or custom settings
+	* dvc remote add data-tracker gs://model_dataset_tracker_course/data
+	* dvc remote add model-tracker gs://model_dataset_tracker_course/model
+	* Add files
+		dvc add file/pathdirected acyclic graph OR dvc add data/local/path --to-remote -r data-tracker
+	* Push files
+		dvc push models/model.pkl -r model-tracker
+
+# Create source files
+	Create files within src folder for load, prepare and process data, other for
+	train your model and make some reports about its performance. Check cookiecutter
+	to get inspiration
+
+# Pipeline for retraing
+## Generate a DAG(directed acyclic graph) using DVC
+	This DAG allows you implement a workflow for the re-traing of models
+	1. Go to terminal
+	2. dvc run -n name/of/step -o path/of/outputs python path/of/script (Create step to save scripts)
+	3. Add other Steps
+		dvc run -n name/of/step -d files python path/of/script (check if is necessary add outputs)
+	4. dvc repro is a command for reproduce de DAG when code has been modified
+		If there's not changes nothing happens. For force the remake of DAG use
+		dvc repro -f
+	5. Check the dag
+		dvc dag
+
+# Develop of API using FastAPI
+1. Create Structure
+2. Create service and endponint (main.py)
+3. In models.py put code to define the characteristics of prediction using the model
+4. Make views. Note: Is really important have in mind that never is good to deliver a raw prediction to end user 'cause model could has an error, so is better treament before deliver
+5. Create utils funtions for make API
+6. Use uvicorn to run the API
+	uvicorn api.main:app
+7. You could use Postman to prepare some case for test your api

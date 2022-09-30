@@ -34,6 +34,9 @@ opening_data = pd.read_csv(StringIO(opening_data_path))
 # df = pd.read_csv(finantials_path)
 # breakpoint() # ~ import pdb; pdb.set_trace()
 
+movie_data.cast_total_facebook_likes = (movie_data.cast_total_facebook_likes
+                                        .astype(int))
+
 numeric_cols_mask = (movie_data.dtypes == float) | (movie_data.dtypes == int)
 numeric_cols = [
     column for column in numeric_cols_mask.index if numeric_cols_mask[column]

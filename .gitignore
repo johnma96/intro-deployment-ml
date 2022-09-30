@@ -95,5 +95,5 @@ credentials/
 *.csv
 
 # Reports files
-*.png
-*.txt
+reports/*.png
+reports/*.txt
